@@ -19,6 +19,7 @@ class OAuth {
 		return [ 
 				OAuth::RESPONSE_TYPE => $this->config->getResponseType (),
 				OAuth::CLIENT_ID => $this->config->getAPIKey (),
+				OAuth::SCOPE=> $this->config->getScope(),
 				OAuth::STATE => $this->config->getState (),
 				OAuth::REDIRECT_URI => $this->config->getRedirectUrl () 
 		];

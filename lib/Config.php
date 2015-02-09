@@ -41,4 +41,7 @@ class Config {
 	public function getCacheExpiry() {
 		return $this->config ['CACHE_FILE_EXPIRY_SECS'];
 	}
+	public function getScope() {
+		return $this->config ['SCOPE'];
+	}
 }
