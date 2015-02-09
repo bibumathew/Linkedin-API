@@ -37,7 +37,7 @@ class OAuth {
 		return [ 
 				OAuth::GRANT_TYPE => $this->config->getAuthCode (),
 				OAuth::CLIENT_ID => $this->config->getAPIKey (),
-				OAuth::CLIENT_SECRET =>$this->config->getAPISecret(),
+				OAuth::CLIENT_SECRET => $this->config->getAPISecret (),
 				OAuth::CODE => $this->sessionManager->getSessionCode (),
 				OAuth::REDIRECT_URI => $this->config->getRedirectUrl () 
 		];
@@ -46,19 +46,32 @@ class OAuth {
 		$query = http_build_query ( $this->getAccessParams () );
 		return $this->config->getAccessTokenUrl () . $query;
 	}
+	private function makeRequest($opts, $url) {
+		$context = stream_context_create ( $opts );
+		return file_get_contents ( $url, false, $context );
+	}
 	public function getAccess() {
-		$context = stream_context_create ( [ 
+		$opts = [ 
 				'http' => [ 
 						'method' => 'POST' 
 				] 
-		] );
-		$response = file_get_contents ( $this->buildAccessTokenUrl (), false, $context );
-		// Native PHP object, please
-		$token = json_decode ( $response );
+		];
+		$token = json_decode ( $this->makeRequest ( $opts, $this->buildAccessTokenUrl () ) );
 		
 		// Store access token and expiration time
 		$this->sessionManager->setSessionAcessToken ( $token->access_token );
 		$this->sessionManager->setSessionExpiry ( time () + $token->expires_in );
+	}
+	public function fetchAPI($url, $method = "GET") {
+		$opts = [ 
+				'http' => [ 
+						'method' => $method,
+						'header' => "Authorization: Bearer " . $this->sessionManager->getSessionAcessToken () . "\r\n" . "x-li-format: json\r\n" 
+				] 
+		];
+		
+		return json_decode ( $this->makeRequest ( $opts, $url ) );
+		;
 	}
 }
 
