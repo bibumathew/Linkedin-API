@@ -1,6 +1,6 @@
 [LINKEDIN_CONFIGURATION]
-API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxx";
-API_SECRET = "xxxxxxxxxxxxxxxxxxxxxxx";
+API_KEY = "xxxxxxxxxxxxxxxx";
+API_SECRET = "xxxxxxxxxxxxx";
 REDIRECT_URI = "http://localhost/linkedin/index.php";
 SESSION_NAME = "linkedin";
 LINKEDIN_BASE_URL = "LinkedIn"
